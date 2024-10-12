@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital API</title>
+</head>
+<body>
+    <h1>Welcome to the Hospital API</h1>
+    <button onclick="window.location.href='/patients'">View All Patients</button>
+    <button onclick="window.location.href='/providers'">View All Providers</button>
+    <div>
+        <h3>Filter Patients by First Name</h3>
+        <form action="/patients/filter" method="get">
+            <select name="first_name" id="first-name-input">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <button type="submit">Filter Patients</button>
+        </form>
+    </div>
+    <div>
+        <h3>Filter Providers by Specialty</h3>
+        <form action="/providers/filter" method="get">
+            <select name="provider_specialty" id="specialty-input">
+                <!-- Options will be populated dynamically -->
+            </select>
+            <button type="submit">Filter Providers</button>
+        </form>
+    </div>
+    <script>
+        // JS code for populating the dropdowns
+    </script>
+</body>
+</html>

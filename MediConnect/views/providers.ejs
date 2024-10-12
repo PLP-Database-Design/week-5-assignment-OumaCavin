@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Providers</title>
+</head>
+<body>
+    <h1>Providers</h1>
+    <ul>
+        <% providers.forEach(provider => { %>
+            <li>
+                <%= provider.first_name %> <%= provider.last_name %> - Speciality: <%= provider.provider_speciality %>
+            </li>
+        <% }) %>
+    </ul>
+    <a href="/">Go Back</a>
+</body>
+</html>

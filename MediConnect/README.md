@@ -16,7 +16,6 @@ The interface of the MediConnect application allows users to navigate easily and
 - [Technologies](#technologies)
 - [Installation](#installation)
 - [Usage](#usage)
-- [API Endpoints](#api-endpoints)
 - [License](#license)
 
 ## Features

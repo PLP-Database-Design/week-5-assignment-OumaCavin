@@ -1,11 +1,8 @@
-require('dotenv').config(); // Load environment variables from .env
+require('dotenv').config(); // To load .env file
 const mysql = require('mysql2');
 const express = require('express');
 const path = require('path'); // Module to work with file paths
 const app = express();
-
-// Set EJS as the view engine
-app.set('view engine', 'ejs');
 
 // MySQL database connection
 const db = mysql.createConnection({
@@ -26,38 +23,13 @@ db.connect((err) => {
 
 // To parse incoming requests with JSON payloads
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (e.g., CSS, JS)
+// Serve static files (e.g., HTML, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Root route ("/") - Serve the index.ejs file with filter dropdowns populated
+// Root route ("/") - Serve the index.html file
 app.get('/', (req, res) => {
-  // Retrieve distinct first names and provider specialties for the dropdown filters
-  const getDistinctFirstNames = new Promise((resolve, reject) => {
-    const query = 'SELECT DISTINCT first_name FROM Patients';
-    db.query(query, (err, results) => {
-      if (err) reject(err);
-      else resolve(results);
-    });
-  });
-
-  const getDistinctSpecialties = new Promise((resolve, reject) => {
-    const query = 'SELECT DISTINCT provider_speciality FROM Providers';
-    db.query(query, (err, results) => {
-      if (err) reject(err);
-      else resolve(results);
-    });
-  });
-
-  // Wait for both queries to complete
-  Promise.all([getDistinctFirstNames, getDistinctSpecialties])
-    .then(([firstNames, specialties]) => {
-      res.render('index', { firstNames, specialties });
-    })
-    .catch((err) => {
-      res.status(500).send(err.message);
-    });
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Retrieve all patients
@@ -67,7 +39,7 @@ app.get('/patients', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('patients', { patients: results });
+    res.json(results);
   });
 });
 
@@ -78,11 +50,11 @@ app.get('/providers', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('providers', { providers: results });
+    res.json(results);
   });
 });
 
-// Retrieve filtered patients by first name
+// Retrieve patients by first name
 app.get('/patients/filter', (req, res) => {
   const firstName = req.query.first_name;
   const query = 'SELECT patient_id, first_name, last_name, date_of_birth FROM Patients WHERE first_name = ?';
@@ -90,11 +62,11 @@ app.get('/patients/filter', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('patients', { patients: results });
+    res.json(results);
   });
 });
 
-// Retrieve filtered providers by specialty
+// Retrieve providers by specialty
 app.get('/providers/filter', (req, res) => {
   const specialty = req.query.provider_speciality;
   const query = 'SELECT first_name, last_name, provider_speciality FROM Providers WHERE provider_speciality = ?';
@@ -102,31 +74,32 @@ app.get('/providers/filter', (req, res) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('providers', { providers: results });
+    res.json(results);
   });
 });
 
-// Retrieve distinct patient first names (API endpoint for dropdowns)
+// Retrieve distinct patient first names
 app.get('/patients/distinct-first-names', (req, res) => {
-  const query = 'SELECT DISTINCT first_name FROM Patients';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
+    const query = 'SELECT DISTINCT first_name FROM Patients';
+    db.query(query, (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(results);
+    });
   });
-});
-
-// Retrieve distinct provider specialties (API endpoint for dropdowns)
-app.get('/providers/distinct-specialities', (req, res) => {
-  const query = 'SELECT DISTINCT provider_speciality FROM Providers';
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json(results);
+  
+  // Retrieve distinct provider specialties
+  app.get('/providers/distinct-specialities', (req, res) => {
+    const query = 'SELECT DISTINCT provider_speciality FROM Providers';
+    db.query(query, (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(results);
+    });
   });
-});
+  
 
 // Start the server
 const PORT = process.env.PORT || 3000; // Use the PORT from .env or default to 3000
