@@ -62,8 +62,7 @@ app.get('/', (req, res) => {
 
 // Retrieve all patients
 app.get('/patients', (req, res) => {
-  // Updated to include all columns
-  const query = 'SELECT patient_id, first_name, last_name, date_of_birth, gender, language FROM Patients';
+  const query = 'SELECT patient_id, first_name, last_name, date_of_birth FROM Patients';
   db.query(query, (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -74,8 +73,7 @@ app.get('/patients', (req, res) => {
 
 // Retrieve all providers
 app.get('/providers', (req, res) => {
-  // Updated to include all columns
-  const query = 'SELECT provider_id, first_name, last_name, provider_speciality, email_address, phone_number, date_joined FROM Providers';
+  const query = 'SELECT first_name, last_name, provider_speciality FROM Providers';
   db.query(query, (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -87,7 +85,7 @@ app.get('/providers', (req, res) => {
 // Retrieve filtered patients by first name
 app.get('/patients/filter', (req, res) => {
   const firstName = req.query.first_name;
-  const query = 'SELECT patient_id, first_name, last_name, date_of_birth, gender, language FROM Patients WHERE first_name = ?';
+  const query = 'SELECT patient_id, first_name, last_name, date_of_birth FROM Patients WHERE first_name = ?';
   db.query(query, [firstName], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
@@ -99,7 +97,7 @@ app.get('/patients/filter', (req, res) => {
 // Retrieve filtered providers by specialty
 app.get('/providers/filter', (req, res) => {
   const specialty = req.query.provider_speciality;
-  const query = 'SELECT provider_id, first_name, last_name, provider_speciality, email_address, phone_number, date_joined FROM Providers WHERE provider_speciality = ?';
+  const query = 'SELECT first_name, last_name, provider_speciality FROM Providers WHERE provider_speciality = ?';
   db.query(query, [specialty], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
