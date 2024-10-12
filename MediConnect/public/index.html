@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+        button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        input, select {
+            padding: 8px;
+            margin-right: 10px;
+        }
+        .filter-container {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Hospital API</h1>
+    
+    <!-- View All Patients and Providers -->
+    <button onclick="window.location.href='/patients'">View All Patients</button>
+    <button onclick="window.location.href='/providers'">View All Providers</button>
+
+    <!-- Filter Patients by First Name -->
+    <div class="filter-container">
+        <h3>Filter Patients by First Name</h3>
+        <select id="first-name-input">
+            <option value="">Select First Name</option>
+        </select>
+        <button onclick="filterPatients()">Filter Patients</button>
+    </div>
+
+    <!-- Filter Providers by Speciality -->
+    <div class="filter-container">
+        <h3>Filter Providers by Speciality</h3>
+        <select id="speciality-input">
+            <option value="">Select Speciality</option>
+        </select>
+        <button onclick="filterProviders()">Filter Providers</button>
+    </div>
+
+    <script>
+        // Fetch distinct patient first names from the server and populate the dropdown
+        function loadDistinctFirstNames() {
+            fetch('/patients/distinct-first-names')
+                .then(response => response.json())
+                .then(data => {
+                    const firstNameDropdown = document.getElementById('first-name-input');
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.first_name;
+                        option.textContent = item.first_name;
+                        firstNameDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching distinct first names:', error));
+        }
+
+        // Fetch distinct provider specialities from the server and populate the dropdown
+        function loadDistinctSpecialities() {
+            fetch('/providers/distinct-specialities')
+                .then(response => response.json())
+                .then(data => {
+                    const specialityDropdown = document.getElementById('speciality-input');
+                    data.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.provider_speciality;
+                        option.textContent = item.provider_speciality;
+                        specialityDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching distinct specialities:', error));
+        }
+
+        // Function to filter patients by first name
+        function filterPatients() {
+            const firstName = document.getElementById('first-name-input').value;
+            if (firstName) {
+                window.location.href = `/patients/filter?first_name=${firstName}`;
+            } else {
+                alert('Please select a first name.');
+            }
+        }
+
+        // Function to filter providers by speciality
+        function filterProviders() {
+            const speciality = document.getElementById('speciality-input').value;
+            if (speciality) {
+                window.location.href = `/providers/filter?provider_speciality=${speciality}`;
+            } else {
+                alert('Please select a speciality.');
+            }
+        }
+
+        // Load distinct options when the page loads
+        window.onload = function() {
+            loadDistinctFirstNames();
+            loadDistinctSpecialities();
+        };
+    </script>
+</body>
+</html>
