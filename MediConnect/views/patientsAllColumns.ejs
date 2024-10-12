@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Patients</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Language</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% patients.forEach(patient => { %>
+                <tr>
+                    <td><%= patient.patient_id %></td>
+                    <td><%= patient.first_name %></td>
+                    <td><%= patient.last_name %></td>
+                    <td><%= patient.date_of_birth.toISOString().split('T')[0] %></td> <!-- Format date -->
+                    <td><%= patient.gender %></td>
+                    <td><%= patient.language %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="/">Go Back</a>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients</title>
+</head>
+<body>
+    <h1>Patients</h1>
+    <ul>
+        <% patients.forEach(patient => { %>
+            <li>
+                <%= patient.first_name %> <%= patient.last_name %> - DOB: <%= patient.date_of_birth %>
+            </li>
+        <% }) %>
+    </ul>
+    <a href="/">Go Back</a>
+</body>
+</html> -->

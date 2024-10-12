@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Providers</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Providers</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Provider ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Specialty</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+                <th>Date Joined</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% providers.forEach(provider => { %>
+                <tr>
+                    <td><%= provider.provider_id %></td>
+                    <td><%= provider.first_name %></td>
+                    <td><%= provider.last_name %></td>
+                    <td><%= provider.provider_speciality %></td>
+                    <td><%= provider.email_address %></td>
+                    <td><%= provider.phone_number %></td>
+                    <td><%= provider.date_joined.toISOString().split('T')[0] %></td> <!-- Format date -->
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="/">Go Back</a>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Providers</title>
+</head>
+<body>
+    <h1>Providers</h1>
+    <ul>
+        <% providers.forEach(provider => { %>
+            <li>
+                <%= provider.first_name %> <%= provider.last_name %> - Speciality: <%= provider.provider_speciality %>
+            </li>
+        <% }) %>
+    </ul>
+    <a href="/">Go Back</a>
+</body>
+</html> -->

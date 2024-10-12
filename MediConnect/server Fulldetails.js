@@ -60,49 +60,51 @@ app.get('/', (req, res) => {
     });
 });
 
-// Retrieve all patients (only specific columns)
+// Retrieve all patients
 app.get('/patients', (req, res) => {
-  const query = 'SELECT patient_id, first_name, last_name, date_of_birth FROM Patients'; // Only specific columns
+  // Updated to include all columns
+  const query = 'SELECT patient_id, first_name, last_name, date_of_birth, gender, language FROM Patients';
   db.query(query, (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('patients', { patients: results, isFiltered: false }); // Pass isFiltered as false
+    res.render('patients', { patients: results });
   });
 });
 
-// Retrieve filtered patients by first name (all columns)
+// Retrieve all providers
+app.get('/providers', (req, res) => {
+  // Updated to include all columns
+  const query = 'SELECT provider_id, first_name, last_name, provider_speciality, email_address, phone_number, date_joined FROM Providers';
+  db.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.render('providers', { providers: results });
+  });
+});
+
+// Retrieve filtered patients by first name
 app.get('/patients/filter', (req, res) => {
   const firstName = req.query.first_name;
-  const query = 'SELECT * FROM Patients WHERE first_name = ?'; // Use SELECT * for all columns
+  const query = 'SELECT patient_id, first_name, last_name, date_of_birth, gender, language FROM Patients WHERE first_name = ?';
   db.query(query, [firstName], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('patients', { patients: results, isFiltered: true }); // Pass isFiltered as true
+    res.render('patients', { patients: results });
   });
 });
 
-// Retrieve all providers (only specific columns)
-app.get('/providers', (req, res) => {
-  const query = 'SELECT provider_id, first_name, last_name, provider_speciality FROM Providers'; // Only specific columns
-  db.query(query, (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.render('providers', { providers: results, isFiltered: false }); // Pass isFiltered as false
-  });
-});
-
-// Retrieve filtered providers by specialty (all columns)
+// Retrieve filtered providers by specialty
 app.get('/providers/filter', (req, res) => {
   const specialty = req.query.provider_speciality;
-  const query = 'SELECT * FROM Providers WHERE provider_speciality = ?'; // Use SELECT * for all columns
+  const query = 'SELECT provider_id, first_name, last_name, provider_speciality, email_address, phone_number, date_joined FROM Providers WHERE provider_speciality = ?';
   db.query(query, [specialty], (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.render('providers', { providers: results, isFiltered: true }); // Pass isFiltered as true
+    res.render('providers', { providers: results });
   });
 });
 
